@@ -1,0 +1,34 @@
+------------------------------------------------
+-- COMPARADOR
+------------------------------------------------
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.STD_LOGIC_UNSIGNED.ALL;
+
+ENTITY comparador IS
+  PORT (
+       i_CLK       : in std_logic;
+       i_TEMPO_MAx : in  std_logic_vector(15 downto 0); 
+       i_CONTADOR  : in  std_logic_vector(15 downto 0);  
+		 o_RESET_CNT : out std_logic; 
+		 o_SEL       : out std_logic_vector(1 downto 0));      
+  end comparador;
+ARCHITECTURE rtl OF comparador IS
+  
+  SIGNAL w_sel : std_logic_vector(1 DOWNTO 0) := "00";
+
+BEGIN
+
+  PROCESS (i_CLK)
+  BEGIN
+    IF (rising_edge(i_CLK)) THEN
+      IF (i_CONTADOR = (i_TEMPO_MAx - '1')) THEN           
+        w_sel <= w_sel + "1";		
+      END IF;
+    END IF;
+  END PROCESS;
+  o_RESET_CNT <= '1' WHEN (i_TEMPO_MAx = i_CONTADOR) ELSE '0';    
+  o_SEL <= w_sel;                                
+    
+END rtl;
